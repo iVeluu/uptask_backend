@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { hashPassword } from "../utils/auth";
 import User from "../models/User";
+import Token from "../models/Token";
+import { generateToken } from "../utils/token";
 
 export class AuthController {
 
@@ -18,9 +20,16 @@ export class AuthController {
 
             //Crear un usuario
             const user = new User(req.body)
+
             //Hashear un password
             user.password = await hashPassword(password)
-            await user.save()
+
+            //Generar el Token
+            const token = new Token()
+            token.token = generateToken()
+            token.user = user.id
+
+            await Promise.allSettled([user.save(), token.save()])
             res.send('Usuario creado correctamente, revisa tu correo para confirmar la cuenta')
         } catch (error) {
             res.status(500).json({error: 'Hubo un error'})
