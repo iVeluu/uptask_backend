@@ -195,8 +195,8 @@ export class AuthController {
 
             const user = await User.findById(tokenExist.user)
             user.password = await hashPassword(req.body.password)
-
-            await Promise.allSettled([user.save(), tokenExist.deleteOne()])
+            await user.save()
+            await tokenExist.deleteOne()
 
             res.send('El password se modificó con correctamente')
         } catch (error) {
