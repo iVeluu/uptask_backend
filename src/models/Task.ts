@@ -4,7 +4,7 @@ const taskStatus = {
     PENDING: 'pending',
     ON_HOLD: 'onHold',
     IN_PROGRESS: 'inProgress',
-    UNDER_PREVIEW: 'underPreview',
+    UNDER_PREVIEW: 'underReview',
     COMPLETED: 'completed'
 } as const
 
