@@ -2,6 +2,7 @@ import { Router } from "express";
 import { ProjectController } from "../controllers/ProjectController";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validation";
+import { authenticate } from "../middleware/auth";
 import { TaskController } from "../controllers/TaskController";
 import { validateProjectExists } from "../middleware/project";
 import { taskBelongsToProject, taskExist } from "../middleware/task";
@@ -10,6 +11,7 @@ const router = Router()
 
 
 router.post('/', 
+    authenticate,
     body('projectName')
     .notEmpty().withMessage('El nombre del proyecto es Obligatorio'),
     body('clientName')

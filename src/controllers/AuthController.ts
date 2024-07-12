@@ -104,8 +104,6 @@ export class AuthController {
             const token = generateJWT({ id: user.id })
 
             res.send(token)
-
-            res.send('Usuario encontrado, confirmado y el password es correcto')
         } catch (error) {
             res.status(500).json({error: 'Hubo un error'})
         }
