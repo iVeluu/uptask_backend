@@ -9,9 +9,10 @@ import { taskBelongsToProject, taskExist } from "../middleware/task";
 
 const router = Router()
 
+router.use(authenticate)
+
 
 router.post('/', 
-    authenticate,
     body('projectName')
     .notEmpty().withMessage('El nombre del proyecto es Obligatorio'),
     body('clientName')
