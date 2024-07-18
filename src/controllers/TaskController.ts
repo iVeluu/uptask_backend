@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Project from "../models/Project";
 import Task from "../models/Task";
+import { selectFields } from "express-validator/lib/field-selection";
 
 export class TaskController {
     static createTask = async ( req: Request, res: Response ) => {
@@ -25,7 +26,9 @@ export class TaskController {
 
     static getTaskById  = async ( req: Request, res: Response ) => {
         try {
-            res.json(req.task)
+            const task = await Task.findById(req.task.id).populate({path: 'completedBy.user', select: 'id name email'})
+            console.log(task)
+            res.json(task)
         } catch (error) {
             return res.status(500).json({error: 'Hubo un Error'})
         }
@@ -55,6 +58,12 @@ export class TaskController {
         try {
             const { status } = req.body
             req.task.status = status
+
+            const data = {
+                user: req.user.id,
+                status
+            }
+            req.task.completedBy.push(data) 
             await req.task.save()
             res.send('Tarea Actualizada')
         } catch (error) {
