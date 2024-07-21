@@ -33,8 +33,12 @@ router.get('/:id',
     ProjectController.getProductById
 )
 
-router.put('/:id', 
-    param('id').isMongoId().withMessage('ID no válido'),
+
+//Aplicar el middleware antes de todo, siempre y cuando se encuentre el param 'projectId' en la url
+router.param('projectId', validateProjectExists)
+
+router.put('/:projectId', 
+    param('projectId').isMongoId().withMessage('ID no válido'),
     body('projectName')
     .notEmpty().withMessage('El nombre del proyecto es Obligatorio'),
     body('clientName')
@@ -42,21 +46,20 @@ router.put('/:id',
     body('description')
     .notEmpty().withMessage('La descripción es Obligatoria'),
     handleInputErrors,
+    hasAuthorization,
     ProjectController.updateProject
 )
 
-router.delete('/:id', 
-    param('id').isMongoId().withMessage('ID no válido'),
+router.delete('/:projectId', 
+    param('projectId').isMongoId().withMessage('ID no válido'),
     handleInputErrors,
+    hasAuthorization,
     ProjectController.deleteProject
 )
 
 
 
 /* Routes for tasks */
-
-//Aplicar el middleware antes de todo, siempre y cuando se encuentre el param 'projectId' en la url
-router.param('projectId', validateProjectExists)
 
 router.post('/:projectId/tasks',
     hasAuthorization,
